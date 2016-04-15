@@ -62,25 +62,25 @@
 
 - (void)processImage:(cv::Mat &)image;
 {
-//    Mat image_copy;
-//    flip(image, image_copy, -1);
-//    Mat image_copy;
+    // Convert to HSV
+    cvtColor(image, image, CV_BGR2HSV);
     
-//    flip(image, image_copy, 1);
+    // Hue (angle, 0-180), Saturation (intensity of color, 0-255), Value (brightness, 0-100)
+    Scalar lower = Scalar(0, 15, 120);
+    Scalar upper = Scalar(33, 250, 255);
     
-//    cv::flip(image, image_copy, 1);
-//    cvtColor(image, image, CV_BGR2HSV);
+    // Apply HSV thresholds for skin color
+    inRange(image, lower, upper, image);
     
+    // Testing slider values
+    NSLog(@"LOWERSliderValue ... %d",(int)[self.lowerHueSlider value]);
+    NSLog(@"UPPERSliderValue ... %d",(int)[self.upperHueSlider value]);
+    NSLog(@"LOWERDILATESliderValue ... %d",(int)[self.lowerDilationSlider value]);
+    NSLog(@"UPPERDILATESliderValue ... %d",(int)[self.upperDilationSlider value]);
     
-//    Mat image_copy;
-//    cvtColor(image, image_copy, CV_BGRA2BGR);
-//    
-//    flip(image_copy, image_copy, 1);
-//    
-    // invert image
-//    bitwise_not(image_copy, image_copy);
-//    cvtColor(image_copy, image, CV_BGR2BGRA);
-    
+    // Erode THEN dilate to remove noise
+    erode(image, image, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
+    dilate(image, image, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
 }
 
 @end

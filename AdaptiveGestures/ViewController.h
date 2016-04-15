@@ -19,6 +19,10 @@ using namespace cv;
 
 @property (nonatomic, strong) VideoCamera* camera;
 @property (weak, nonatomic) IBOutlet UIImageView* imageView;
+@property (weak, nonatomic) IBOutlet UISlider *lowerHueSlider;
+@property (weak, nonatomic) IBOutlet UISlider *upperHueSlider;
+@property (weak, nonatomic) IBOutlet UISlider *lowerDilationSlider;
+@property (weak, nonatomic) IBOutlet UISlider *upperDilationSlider;
 
 @end
 

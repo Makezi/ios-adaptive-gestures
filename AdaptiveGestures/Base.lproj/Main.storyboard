@@ -28,6 +28,18 @@
                                     <rect key="frame" x="24" y="326" width="352" height="466"/>
                                 </variation>
                             </imageView>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="45" translatesAutoresizingMaskIntoConstraints="NO" id="SkC-Zh-Ooy">
+                                <rect key="frame" x="241" y="446" width="118" height="31"/>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="cqB-E0-NQa">
+                                <rect key="frame" x="241" y="484" width="118" height="31"/>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="AhH-mx-YTc">
+                                <rect key="frame" x="241" y="517" width="118" height="31"/>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="yit-1f-RSA">
+                                <rect key="frame" x="241" y="550" width="118" height="31"/>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -38,6 +50,10 @@
                     </view>
                     <connections>
                         <outlet property="imageView" destination="EXL-Nk-vQJ" id="rCT-yH-ZrV"/>
+                        <outlet property="lowerDilationSlider" destination="AhH-mx-YTc" id="mLH-rw-VJe"/>
+                        <outlet property="lowerHueSlider" destination="SkC-Zh-Ooy" id="4qR-s6-lik"/>
+                        <outlet property="upperDilationSlider" destination="yit-1f-RSA" id="zRH-zQ-09U"/>
+                        <outlet property="upperHueSlider" destination="cqB-E0-NQa" id="qP0-Pe-RF5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
