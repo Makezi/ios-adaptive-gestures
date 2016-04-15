@@ -64,13 +64,15 @@
 {
     // Convert to HSV
     cvtColor(image, image, CV_BGR2HSV);
+    // Create mask for HSV image thresholds
+    Mat mask;
     
     // Hue (angle, 0-180), Saturation (intensity of color, 0-255), Value (brightness, 0-100)
     Scalar lower = Scalar(0, 15, 120);
     Scalar upper = Scalar(33, 250, 255);
     
     // Apply HSV thresholds for skin color
-    inRange(image, lower, upper, image);
+    inRange(image, lower, upper, mask);
     
     // Testing slider values
     NSLog(@"LOWERSliderValue ... %d",(int)[self.lowerHueSlider value]);
@@ -78,9 +80,34 @@
     NSLog(@"LOWERDILATESliderValue ... %d",(int)[self.lowerDilationSlider value]);
     NSLog(@"UPPERDILATESliderValue ... %d",(int)[self.upperDilationSlider value]);
     
-    // Erode THEN dilate to remove noise
-    erode(image, image, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
-    dilate(image, image, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
+    // Convert original image back to RGB
+    cvtColor(image, image, CV_HSV2RGB);
+
+    // Erode THEN dilate to remove noise from HSV mask
+    erode(mask, mask, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
+    dilate(mask, mask, getStructuringElement(MORPH_RECT, cvSize(3, 3)));
+    
+    // Find contours
+    std::vector<std::vector<cv::Point> > contours;
+    cv::findContours(mask, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
+    
+    // Retreive largest contour
+    double largestContour = 0;
+    int largestIndex = 0;
+    for(int i=0; i<contours.size(); i++){
+        if(contours[i].size() > largestContour){
+            largestContour = contours[i].size();
+            largestIndex = i;
+        }
+    }
+    
+    // Draw largest contour (if exists)
+    if(!contours.empty()){
+        cv::drawContours(image, contours, largestIndex, Scalar(255, 0, 0));
+        cv::Rect brect = cv::boundingRect(contours[largestIndex]);
+        cv::rectangle(image, brect, Scalar(255, 0, 0));
+    }
+    
 }
 
 @end
