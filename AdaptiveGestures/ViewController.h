@@ -28,6 +28,8 @@ enum ImageState { NORMAL, SKIN };
     bool cascadeLoad;
     State state;
     ImageState imageState;
+    std::vector<std::vector<cv::Point> > contours;
+    int largestContourIndex;
 }
 
 @property (nonatomic, strong) VideoCamera* camera;

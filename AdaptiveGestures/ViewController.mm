@@ -193,6 +193,8 @@ const float *ranges[] = {h_range, s_range};
             switch(imageState){
                 case NORMAL:
                     [self findAndDrawContours:(final) :(image)];
+                    [self findAndDrawConvexHull:(final) :(image)];
+                    
                     break;
                 case SKIN:
                     final.copyTo(image);
@@ -276,25 +278,43 @@ const float *ranges[] = {h_range, s_range};
 /* Find the largest contour from an image and then draw it on another */
 -(void)findAndDrawContours:(cv::Mat) fromImage :(cv::Mat) toImage {
     // Find contours
-    std::vector<std::vector<cv::Point> > contours;
     findContours(fromImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
     
     // Retreive largest contour
     double largestContour = 0;
-    int largestIndex = 0;
+    largestContourIndex = 0;
+    
     for(int i=0; i<contours.size(); i++){
         if(contours[i].size() > largestContour){
             largestContour = contours[i].size();
-            largestIndex = i;
+            largestContourIndex = i;
         }
     }
     
     // Draw largest contour (if exists)
     if(!contours.empty()){
         Scalar color = Scalar(0, 255, 0);
-        cv::drawContours(toImage, contours, largestIndex, color, CV_FILLED);
-        cv::Rect brect = cv::boundingRect(contours[largestIndex]);
-        cv::rectangle(toImage, brect, color);
+        cv::drawContours(toImage, contours, largestContourIndex, color, CV_FILLED);
+        cv::Rect brect = cv::boundingRect(contours[largestContourIndex]);
+//        cv::rectangle(toImage, brect, color);
+    }
+}
+
+/* Finds the convex hull from largest contour and draw its it to the toImage */
+-(void)findAndDrawConvexHull:(cv::Mat) fromImage :(cv::Mat) toImage {
+    std::vector<std::vector<cv::Point> > hulls(contours.size());
+    // Find convex hulls
+    for(int i = 0; i < contours.size(); i++){
+        convexHull(Mat(contours[i]), hulls[i], false);
+    }
+    
+    // Draw largest convex hull (if contour exists)
+    if(!hulls.empty()){
+        Scalar color = Scalar(150, 255, 0);
+        for(int i = 0; i < contours.size(); i++){
+            cv::drawContours(toImage, hulls, largestContourIndex, color);
+        }
+        
     }
 }
 
