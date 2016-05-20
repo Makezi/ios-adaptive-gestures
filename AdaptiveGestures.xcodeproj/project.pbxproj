@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F5CF6A21CE9A4A500060364 /* lbpcascade_frontalface.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0F5CF6A11CE9A4A500060364 /* lbpcascade_frontalface.xml */; };
+		0F5CF6A41CEC279A00060364 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F5CF6A31CEC279A00060364 /* Main.storyboard */; };
 		0FBE60471CBE43170031037B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE60461CBE43170031037B /* main.m */; };
 		0FBE604A1CBE43170031037B /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE60491CBE43170031037B /* AppDelegate.mm */; };
 		0FBE604D1CBE43170031037B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE604C1CBE43170031037B /* ViewController.mm */; };
-		0FBE60501CBE43170031037B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE604E1CBE43170031037B /* Main.storyboard */; };
 		0FBE60521CBE43170031037B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE60511CBE43170031037B /* Assets.xcassets */; };
 		0FBE60551CBE43170031037B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE60531CBE43170031037B /* LaunchScreen.storyboard */; };
 		0FBE60601CBE43170031037B /* AdaptiveGesturesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE605F1CBE43170031037B /* AdaptiveGesturesTests.m */; };
@@ -49,13 +50,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F5CF6A11CE9A4A500060364 /* lbpcascade_frontalface.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = lbpcascade_frontalface.xml; path = "../../../../../Downloads/opencv-master/data/lbpcascades/lbpcascade_frontalface.xml"; sourceTree = "<group>"; };
+		0F5CF6A31CEC279A00060364 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		0FBE60421CBE43170031037B /* AdaptiveGestures.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdaptiveGestures.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBE60461CBE43170031037B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0FBE60481CBE43170031037B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0FBE60491CBE43170031037B /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		0FBE604B1CBE43170031037B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		0FBE604C1CBE43170031037B /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		0FBE604F1CBE43170031037B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0FBE60511CBE43170031037B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0FBE60541CBE43170031037B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0FBE60561CBE43170031037B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -147,7 +149,7 @@
 				0FBE60491CBE43170031037B /* AppDelegate.mm */,
 				0FBE604B1CBE43170031037B /* ViewController.h */,
 				0FBE604C1CBE43170031037B /* ViewController.mm */,
-				0FBE604E1CBE43170031037B /* Main.storyboard */,
+				0F5CF6A31CEC279A00060364 /* Main.storyboard */,
 				0FBE60511CBE43170031037B /* Assets.xcassets */,
 				0FBE60531CBE43170031037B /* LaunchScreen.storyboard */,
 				0FBE60561CBE43170031037B /* Info.plist */,
@@ -161,6 +163,7 @@
 		0FBE60451CBE43170031037B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0F5CF6A11CE9A4A500060364 /* lbpcascade_frontalface.xml */,
 				0FBE60A21CD70C710031037B /* haarcascade_frontalface_alt2.xml */,
 				0FBE60A01CD6F1400031037B /* haarcascade_frontalface_default.xml */,
 				0FBE607C1CBE44B50031037B /* AdaptiveGestures.pch */,
@@ -311,11 +314,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F5CF6A41CEC279A00060364 /* Main.storyboard in Resources */,
 				0FBE60A11CD6F1400031037B /* haarcascade_frontalface_default.xml in Resources */,
 				0FBE60551CBE43170031037B /* LaunchScreen.storyboard in Resources */,
 				0FBE60A31CD70C710031037B /* haarcascade_frontalface_alt2.xml in Resources */,
 				0FBE60521CBE43170031037B /* Assets.xcassets in Resources */,
-				0FBE60501CBE43170031037B /* Main.storyboard in Resources */,
+				0F5CF6A21CE9A4A500060364 /* lbpcascade_frontalface.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,14 +383,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0FBE604E1CBE43170031037B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0FBE604F1CBE43170031037B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0FBE60531CBE43170031037B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -577,6 +573,7 @@
 				0FBE60711CBE43180031037B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0FBE60721CBE43180031037B /* Build configuration list for PBXNativeTarget "AdaptiveGesturesTests" */ = {
 			isa = XCConfigurationList;
@@ -585,6 +582,7 @@
 				0FBE60741CBE43180031037B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0FBE60751CBE43180031037B /* Build configuration list for PBXNativeTarget "AdaptiveGesturesUITests" */ = {
 			isa = XCConfigurationList;
@@ -593,6 +591,7 @@
 				0FBE60771CBE43180031037B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

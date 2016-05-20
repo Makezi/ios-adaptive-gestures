@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UuP-sL-Md5"/>
@@ -49,10 +51,46 @@
                                     <action selector="sampleButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D8j-1S-x88"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="4" maxValue="15" translatesAutoresizingMaskIntoConstraints="NO" id="41s-2x-Q5x">
+                                <rect key="frame" x="241" y="437" width="118" height="31"/>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="7" minValue="4" maxValue="15" translatesAutoresizingMaskIntoConstraints="NO" id="lTR-1v-iiU">
+                                <rect key="frame" x="241" y="475" width="118" height="31"/>
+                            </slider>
+                            <navigationBar contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfy-Re-tRC">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <items>
+                                    <navigationItem title="Hand Gestures" id="5aj-bT-9TS">
+                                        <leftBarButtonItems>
+                                            <barButtonItem title="Normal" id="R6W-vY-uFv">
+                                                <connections>
+                                                    <action selector="selectNormal:" destination="BYZ-38-t0r" id="P0m-l6-avI"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="BackProj" id="a04-ZD-Mpi">
+                                                <connections>
+                                                    <action selector="selectBackProj:" destination="BYZ-38-t0r" id="gTa-fk-MVD"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" style="plain" id="eCM-hl-MDM">
+                                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="wjb-f6-7BQ">
+                                                <rect key="frame" x="447" y="7" width="133" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <segments>
+                                                    <segment title="Test"/>
+                                                    <segment title="Test"/>
+                                                </segments>
+                                            </segmentedControl>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="EXL-Nk-vQJ" secondAttribute="trailing" constant="-50" id="4dq-rO-EHh"/>
+                            <constraint firstItem="rfy-Re-tRC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Cmt-SV-q3R"/>
                             <constraint firstItem="EXL-Nk-vQJ" firstAttribute="top" secondItem="UuP-sL-Md5" secondAttribute="bottom" id="FqK-nQ-62r"/>
                             <constraint firstItem="X78-YE-NR8" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="ITt-nF-Kye"/>
                             <constraint firstItem="EXL-Nk-vQJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-50" id="bls-zT-Iav"/>
@@ -60,13 +98,18 @@
                             <constraint firstItem="rbz-rZ-7bU" firstAttribute="top" secondItem="X78-YE-NR8" secondAttribute="bottom" constant="8" id="e4O-3c-deF"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="backProjButton" destination="a04-ZD-Mpi" id="5hL-JJ-CNq"/>
                         <outlet property="fps" destination="jzO-f5-5Jf" id="GrB-rD-Hj7"/>
+                        <outlet property="hueSlider" destination="41s-2x-Q5x" id="E4t-uE-8Gj"/>
                         <outlet property="imageView" destination="EXL-Nk-vQJ" id="rCT-yH-ZrV"/>
+                        <outlet property="normalButton" destination="R6W-vY-uFv" id="ABm-af-xN0"/>
                         <outlet property="sampleSkinButton" destination="X78-YE-NR8" id="C5M-Rv-3QP"/>
+                        <outlet property="satSlider" destination="lTR-1v-iiU" id="FpK-DP-JAT"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="420" y="369"/>
         </scene>

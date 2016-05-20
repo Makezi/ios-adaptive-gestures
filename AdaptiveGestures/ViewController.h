@@ -20,14 +20,27 @@ using namespace std;
 @interface ViewController : UIViewController<VideoCameraDelegate> {
     VideoCamera* camera;
     CascadeClassifier faceDetector;
+    MatND skinHist;
+    int totalFrames;
 }
 
-enum State { FACE, HAND };
+enum State { FACE, HAND, DETECT };
+enum ImageState { NORMAL, SKIN };
 
 @property (nonatomic, strong) VideoCamera* camera;
-@property (weak, nonatomic) IBOutlet UIImageView* imageView;
-@property (weak, nonatomic) IBOutlet UILabel *fps;
+@property (weak, nonatomic) IBOutlet UIImageView* cameraView;
+@property (weak, nonatomic) IBOutlet UILabel *fpsLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sampleSkinButton;
+@property (weak, nonatomic) IBOutlet UISlider *hueSlider;
+@property (weak, nonatomic) IBOutlet UILabel *hueLabel;
+@property (weak, nonatomic) IBOutlet UISlider *satSlider;
+@property (weak, nonatomic) IBOutlet UILabel *satLabel;
+@property (weak, nonatomic) IBOutlet UISlider *dilateSlider;
+@property (weak, nonatomic) IBOutlet UILabel *dilateLabel;
+@property (weak, nonatomic) IBOutlet UISlider *erodeSlider;
+@property (weak, nonatomic) IBOutlet UILabel *erodeLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *imageControl;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *stateControl;
 
 @end
 

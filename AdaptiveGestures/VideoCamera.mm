@@ -5,7 +5,7 @@
 //  Created by Marko Djordjevic on 14/04/2016.
 //  Copyright © 2016 Marko Djordjevic. All rights reserved.
 //
-//  Methods defined fix camera orientation issues
+//  Methods defined to fix camera orientation issues
 //
 
 #import <Foundation/Foundation.h>
@@ -14,14 +14,12 @@
 #define DEGREES_RADIANS(angle) ((angle) / 180.0 * M_PI)
 @implementation VideoCamera
 
-- (void)updateOrientation;
-{
+- (void)updateOrientation {
     self->customPreviewLayer.bounds = CGRectMake(0, 0, self.parentView.frame.size.width, self.parentView.frame.size.height);
     [self layoutPreviewLayer];
 }
 
-- (void)layoutPreviewLayer;
-{
+- (void)layoutPreviewLayer {
     if (self.parentView != nil)
     {
         CALayer* layer = self->customPreviewLayer;

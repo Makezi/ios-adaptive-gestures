@@ -31,36 +31,21 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Base.lproj/Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			HqmIwwQUihhh5V8ceIRIlr8aXgs=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
-		<key>Base.lproj/Main.storyboardc/Info.plist</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			MDrKFvFWroTb0+KEbQShBcoBvo4=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
-		<key>Base.lproj/Main.storyboardc/UIViewController-BYZ-38-t0r.nib</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			uWhmC/q1DTHIwjvcX+6cicZHnrI=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
 		<key>Info.plist</key>
 		<data>
 		Uj0RZtPP9PczIQE1mDsRKHkc+Eo=
+		</data>
+		<key>Main.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main.storyboardc/RhO-OB-PGh-view-RAS-9F-oku.nib</key>
+		<data>
+		p+EViftDEiY9rKZlrhMw/69I/mA=
+		</data>
+		<key>Main.storyboardc/UIViewController-RhO-OB-PGh.nib</key>
+		<data>
+		BMJGi9UiQEMWtJOMuu99E7YFL68=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -77,6 +62,10 @@
 		<key>haarcascade_frontalface_default.xml</key>
 		<data>
 		haMXzi/AQVdBpBc26ZvSgdJDdWg=
+		</data>
+		<key>lbpcascade_frontalface.xml</key>
+		<data>
+		1mjL6HEvBivMaviY67KTe3Pc/S0=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -108,33 +97,18 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Base.lproj/Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			HqmIwwQUihhh5V8ceIRIlr8aXgs=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
-		<key>Base.lproj/Main.storyboardc/Info.plist</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			MDrKFvFWroTb0+KEbQShBcoBvo4=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
-		<key>Base.lproj/Main.storyboardc/UIViewController-BYZ-38-t0r.nib</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			uWhmC/q1DTHIwjvcX+6cicZHnrI=
-			</data>
-			<key>optional</key>
-			<true/>
-		</dict>
+		<key>Main.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main.storyboardc/RhO-OB-PGh-view-RAS-9F-oku.nib</key>
+		<data>
+		p+EViftDEiY9rKZlrhMw/69I/mA=
+		</data>
+		<key>Main.storyboardc/UIViewController-RhO-OB-PGh.nib</key>
+		<data>
+		BMJGi9UiQEMWtJOMuu99E7YFL68=
+		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
 		4fhEHcmZmR32goDH9kyAcoqId8c=
@@ -146,6 +120,10 @@
 		<key>haarcascade_frontalface_default.xml</key>
 		<data>
 		haMXzi/AQVdBpBc26ZvSgdJDdWg=
+		</data>
+		<key>lbpcascade_frontalface.xml</key>
+		<data>
+		1mjL6HEvBivMaviY67KTe3Pc/S0=
 		</data>
 	</dict>
 	<key>rules</key>
