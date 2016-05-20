@@ -19,15 +19,7 @@
 @synthesize cameraView;
 @synthesize camera;
 
-// Global variables
-
-bool cascadeLoad = false;
-
-State state;
-ImageState imageState;
-
-
-
+// Global Variables
 int channels[] = {0, 1};
 float h_range[] = {0, 179};
 float s_range[] = {0, 255};
@@ -166,10 +158,9 @@ const float *ranges[] = {h_range, s_range};
             erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
             dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
             
-            Mat img = image;
+            // Display different image based on imageState
             switch(imageState){
                 case NORMAL:
-                    img.copyTo(image);
                     break;
                 case SKIN:
                     final.copyTo(image);
@@ -197,34 +188,12 @@ const float *ranges[] = {h_range, s_range};
             erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
             dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
             
-            Mat img = image;
             
+            // Display different image based on imageState
             switch(imageState){
                 case NORMAL:
-                {
-                    // Find contours
-                    std::vector<std::vector<cv::Point> > contours;
-                    findContours(final, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-                    
-                    // Retreive largest contour
-                    double largestContour = 0;
-                    int largestIndex = 0;
-                    for(int i=0; i<contours.size(); i++){
-                        if(contours[i].size() > largestContour){
-                            largestContour = contours[i].size();
-                            largestIndex = i;
-                        }
-                    }
-                    
-                    // Draw largest contour (if exists)
-                    if(!contours.empty()){
-                        cv::drawContours(image, contours, largestIndex, Scalar(255, 0, 0), CV_FILLED);
-                        cv::Rect brect = cv::boundingRect(contours[largestIndex]);
-                        cv::rectangle(image, brect, Scalar(255, 0, 0));
-                    }
-                    img.copyTo(image);
+                    [self findAndDrawContours:(final) :(image)];
                     break;
-                }
                 case SKIN:
                     final.copyTo(image);
                     break;
@@ -302,6 +271,31 @@ const float *ranges[] = {h_range, s_range};
     rectangle(image, roiPoint1, roiPoint2, color, 1, 8, 0);
     
     return faceROIImage;
+}
+
+/* Find the largest contour from an image and then draw it on another */
+-(void)findAndDrawContours:(cv::Mat) fromImage :(cv::Mat) toImage {
+    // Find contours
+    std::vector<std::vector<cv::Point> > contours;
+    findContours(fromImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+    
+    // Retreive largest contour
+    double largestContour = 0;
+    int largestIndex = 0;
+    for(int i=0; i<contours.size(); i++){
+        if(contours[i].size() > largestContour){
+            largestContour = contours[i].size();
+            largestIndex = i;
+        }
+    }
+    
+    // Draw largest contour (if exists)
+    if(!contours.empty()){
+        Scalar color = Scalar(0, 255, 0);
+        cv::drawContours(toImage, contours, largestIndex, color, CV_FILLED);
+        cv::Rect brect = cv::boundingRect(contours[largestIndex]);
+        cv::rectangle(toImage, brect, color);
+    }
 }
 
 /* TEMP FUNCTION - COMPLETE LATER */

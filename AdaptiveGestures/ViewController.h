@@ -17,15 +17,18 @@
 using namespace cv;
 using namespace std;
 
+enum State { FACE, HAND, DETECT };
+enum ImageState { NORMAL, SKIN };
+
 @interface ViewController : UIViewController<VideoCameraDelegate> {
     VideoCamera* camera;
     CascadeClassifier faceDetector;
     MatND skinHist;
     int totalFrames;
+    bool cascadeLoad;
+    State state;
+    ImageState imageState;
 }
-
-enum State { FACE, HAND, DETECT };
-enum ImageState { NORMAL, SKIN };
 
 @property (nonatomic, strong) VideoCamera* camera;
 @property (weak, nonatomic) IBOutlet UIImageView* cameraView;
