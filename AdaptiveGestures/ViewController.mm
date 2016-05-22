@@ -172,6 +172,47 @@ const float *ranges[] = {h_range, s_range};
         }
         case HAND:
         {
+            // Get hand ROI
+            Mat handROIImage = [self getHandROI:(image)];
+            
+            // Convert ROI to HSV
+            Mat roiHSV;
+            cvtColor(handROIImage, roiHSV, CV_BGR2HSV);
+            
+            // Get histogram of the HSV of the ROI
+            skinHist = [self getHistogram:(roiHSV)];
+            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
+            
+            // Calculate a back projection of the hue image
+            Mat backProjectedImage;
+            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
+            
+            // Blur the back projection
+            Mat blur;
+            medianBlur(backProjectedImage, blur, 9);
+            Mat final;
+            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
+            
+            // Erode and dilate the final image
+            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
+            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
+            
+            // Display different image based on imageState
+            switch(imageState){
+                case NORMAL:
+                    break;
+                case SKIN:
+                    final.copyTo(image);
+                    break;
+            }
+
+            
+            NSLog(@"HAND STATE");
+            break;
+        }
+        case DETECT:
+        {
+            
             //[self getHandROI:(image)];
             // Normalise the skin histogram
             normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
@@ -192,7 +233,8 @@ const float *ranges[] = {h_range, s_range};
             // Display different image based on imageState
             switch(imageState){
                 case NORMAL:
-                    [self findAndDrawContours:(final) :(image)];
+                    //                    [self findAndDrawContours:(final) :(image)];
+                    [self findAndDrawLargestContour:(final) :(image)];
                     [self findAndDrawConvexHull:(final) :(image)];
                     
                     break;
@@ -200,7 +242,8 @@ const float *ranges[] = {h_range, s_range};
                     final.copyTo(image);
                     break;
             }
-            NSLog(@"HAND STATE");
+
+            NSLog(@"DETECT STATE");
             break;
         }
         default:
@@ -275,75 +318,121 @@ const float *ranges[] = {h_range, s_range};
     return faceROIImage;
 }
 
-/* Find the largest contour from an image and then draw it on another */
--(void)findAndDrawContours:(cv::Mat) fromImage :(cv::Mat) toImage {
+/* Find the largest contour from srcImage and then draw it on outputImage */
+-(void)findAndDrawLargestContour:(cv::Mat) srcImage :(cv::Mat) outputImage {
     // Find contours
-    findContours(fromImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+    findContours(srcImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
     
-    // Retreive largest contour
-    double largestContour = 0;
+    // Return if none exist
+    if(contours.size() == 0){
+        return;
+        
+    }
+    // Find largest contour based on area
+    int maxArea = 0;
     largestContourIndex = 0;
-    
-    for(int i=0; i<contours.size(); i++){
-        if(contours[i].size() > largestContour){
-            largestContour = contours[i].size();
+    for(int i = 0; i < contours.size(); i++){
+        int area = (int)contourArea(contours[i]);
+        if(area > maxArea){
             largestContourIndex = i;
+            maxArea = area;
         }
     }
     
-    // Draw largest contour (if exists)
-    if(!contours.empty()){
+    // Simplify the largest contour
+    approxPolyDP(Mat(contours[largestContourIndex]), contours[largestContourIndex], 5, true);
+    
+    // Draw largest contour (if it exists)
+    if(!contours[largestContourIndex].empty()){
         Scalar color = Scalar(0, 255, 0);
-        cv::drawContours(toImage, contours, largestContourIndex, color, CV_FILLED);
-        cv::Rect brect = cv::boundingRect(contours[largestContourIndex]);
-//        cv::rectangle(toImage, brect, color);
+        drawContours(outputImage, contours, largestContourIndex, color, CV_FILLED);
     }
 }
 
 /* Finds the convex hull from largest contour and draw its it to the toImage */
--(void)findAndDrawConvexHull:(cv::Mat) fromImage :(cv::Mat) toImage {
-    std::vector<std::vector<cv::Point> > hulls(contours.size());
+-(void)findAndDrawConvexHull:(cv::Mat) srcImage :(cv::Mat) outputImage {
     // Find convex hulls
+    std::vector<std::vector<cv::Point>> hullsP(contours.size());
+    std::vector<std::vector<int>> hullsI(contours.size());
     for(int i = 0; i < contours.size(); i++){
-        convexHull(Mat(contours[i]), hulls[i], false);
+        convexHull(Mat(contours[i]), hullsP[i], true);
+        convexHull(Mat(contours[i]), hullsI[i], true);
     }
     
-    // Draw largest convex hull (if contour exists)
-    if(!hulls.empty()){
+    // Draw largest convex hull (if it exists)
+    if(!hullsP.empty()){
         Scalar color = Scalar(150, 255, 0);
         for(int i = 0; i < contours.size(); i++){
-            cv::drawContours(toImage, hulls, largestContourIndex, color);
+            drawContours(outputImage, hullsP, largestContourIndex, color);
         }
-        
     }
+    
+    
+    
+    
+//    std::vector<std::vector<cv::Point>> hulls(contours.size());
+//    std::vector<std::vector<int>> hullsI(contours.size());
+//    std::vector<std::vector<Vec4i>> defects(contours.size());
+//    
+//    Scalar color = Scalar(150, 255, 0);
+//    
+//    // Find convex hulls
+//    for(int i = 0; i < contours.size(); i++){
+//        convexHull(Mat(contours[i]), hulls[i], true);
+//        convexHull(Mat(contours[i]), hullsI[i], true);
+//        drawContours(toImage, hulls, largestContourIndex, color);
+    
+//        convexityDefects(contours[i], hullsI[i], defects[i]);
+        
+        
+        
+        // Find convex defects
+//        std::vector<Vec4i> defects;
+//        if(hullsI[i].size() > 0){
+//            cv::Point2f rect_points[4];
+//            rect.points(rect_points);
+//            for(int j = 0; j < 4; j++){
+//                line(toImage, rect_points[j], rect_points[(j+1)%4], Scalar(255, 0, 0), 1, 8);
+//                cv::Point rough_palm_center;
+//                convexityDefects(contours[i], hulls[i], defects);
+//            }
+//        
+//        }
+        
+//    }
+    
+    // Draw largest convex hull (if contour exists)
+//    if(!hulls.empty()){
+//        Scalar color = Scalar(150, 255, 0);
+//        for(int i = 0; i < contours.size(); i++){
+//            cv::drawContours(toImage, hulls, largestContourIndex, color);
+//        }
+//        
+//    }
 }
 
 /* TEMP FUNCTION - COMPLETE LATER */
 -(cv::Mat)getHandROI:(cv::Mat)image {
-    int x = image.rows/2;
-    int y = image.cols/2;
+    int width = image.size().width;
+    int height = image.size().height;
+    int x = image.size().width/2;
+    int y = image.size().height/2;
     
-    
-//    cv::rectangle(image, cv::Point(x-image.rows/2, y-image.cols/2), cv::Point(x+image.rows/2, y+image.cols/2/2), Scalar(0, 255, 0));
-    
-//    int x2 = x - image.rows/2;
-//    int y2 = y - image.cols/2;
-    
-    float topLeft_X = x + 0.25;
-    float topLeft_Y = x + 0.25f;
-    float bottomRight_X = topLeft_X + 0.5;
-    float bottomRight_Y = topLeft_Y + 0.5;
-    
+    float topLeft_X = x-width/10;
+    float topLeft_Y = y-height/10;
+    float bottomRight_X = x+width/20;
+    float bottomRight_Y = y+height/20;
     
     cv::Point roiPoint1(topLeft_X, topLeft_Y);
     cv::Point roiPoint2(bottomRight_X, bottomRight_Y);
     
+    Mat handROIImage = image(cv::Rect(topLeft_X, topLeft_Y, bottomRight_X - topLeft_X, bottomRight_Y - topLeft_Y));
+    
+    // Draw rectangle around hand ROI
     Scalar color = Scalar(0, 0, 255);
     rectangle(image, roiPoint1, roiPoint2, color, 1, 8, 0);
     
-    
-    return image;
-    
+    return handROIImage;
 }
 
 /* Caclulates a hisogram of passed image with adjustable HUE and SATURATION channels (bins) */
@@ -420,12 +509,16 @@ const float *ranges[] = {h_range, s_range};
         self.satLabel.enabled = true;
     }else if(selectedSegment == 1){
         state = HAND;
+        self.hueSlider.enabled = true;
+        self.hueLabel.enabled = true;
+        self.satSlider.enabled = true;
+        self.satLabel.enabled = true;
+    }else if(selectedSegment == 2){
+        state = DETECT;
         self.hueSlider.enabled = false;
         self.hueLabel.enabled = false;
         self.satSlider.enabled = false;
         self.satLabel.enabled = false;
-    }else if(selectedSegment == 2){
-        state = DETECT;
     }
 }
 
