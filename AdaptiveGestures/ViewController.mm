@@ -142,30 +142,6 @@ const float *ranges[] = {h_range, s_range};
             
             // Get histogram of the HSV of the ROI
             skinHist = [self getHistogram:(roiHSV)];
-            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
-            
-            // Calculate a back projection of the hue image
-            Mat backProjectedImage;
-            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
-            
-            // Blur the back projection
-            Mat blur;
-            medianBlur(backProjectedImage, blur, 9);
-            Mat final;
-            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
-            
-            // Erode and dilate the final image
-            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
-            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
-            
-            // Display different image based on imageState
-            switch(imageState){
-                case NORMAL:
-                    break;
-                case SKIN:
-                    final.copyTo(image);
-                    break;
-            }
             
             NSLog(@"FACE STATE");
             break;
@@ -181,73 +157,50 @@ const float *ranges[] = {h_range, s_range};
             
             // Get histogram of the HSV of the ROI
             skinHist = [self getHistogram:(roiHSV)];
-            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
-            
-            // Calculate a back projection of the hue image
-            Mat backProjectedImage;
-            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
-            
-            // Blur the back projection
-            Mat blur;
-            medianBlur(backProjectedImage, blur, 9);
-            Mat final;
-            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
-            
-            // Erode and dilate the final image
-            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
-            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
-            
-            // Display different image based on imageState
-            switch(imageState){
-                case NORMAL:
-                    break;
-                case SKIN:
-                    final.copyTo(image);
-                    break;
-            }
-
             
             NSLog(@"HAND STATE");
             break;
         }
         case DETECT:
-        {
-            
-            //[self getHandROI:(image)];
-            // Normalise the skin histogram
-            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
-            Mat backProjectedImage;
-            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
-            
-            // Blur the back projection
-            Mat blur;
-            medianBlur(backProjectedImage, blur, 9);
-            Mat final;
-            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
-            
-            // Erode and dilate the final image
-            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
-            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
-            
-            
-            // Display different image based on imageState
-            switch(imageState){
-                case NORMAL:
-                    //                    [self findAndDrawContours:(final) :(image)];
-                    [self findAndDrawLargestContour:(final) :(image)];
-                    [self findAndDrawConvexHull:(final) :(image)];
-                    
-                    break;
-                case SKIN:
-                    final.copyTo(image);
-                    break;
-            }
-
             NSLog(@"DETECT STATE");
             break;
-        }
         default:
             NSLog(@"INVALID STATE");
+            break;
+    }
+    
+    if(skinHist.empty()){
+        return;
+    }
+    
+    // Normalize the histogram
+    normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
+    
+    // Calculate a back projection of the hue image
+    Mat backProjectedImage;
+    calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
+    
+    // Blur the back projection
+    Mat blur;
+    medianBlur(backProjectedImage, blur, 9);
+    Mat final;
+    threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
+    
+    // Erode and dilate the final image
+    erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
+    dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
+    
+    switch(imageState){
+        case NORMAL:
+            if(state == DETECT){
+                [self findAndDrawLargestContour:(final) :(image)];
+                [self findAndDrawConvexHull:(final) :(image)];
+            }
+            break;
+        case SKIN:
+            final.copyTo(image);
+            break;
+        default:
             break;
     }
     
