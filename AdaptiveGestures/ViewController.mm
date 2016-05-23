@@ -82,14 +82,15 @@ const float *ranges[] = {h_range, s_range};
     
     // Set default FPS to 30
     self.camera.defaultFPS = 30;
-    
+
     // Set grayscale to NO
     self.camera.grayscaleMode = NO;
 }
 
 /* Initialise face detector by loading cascade model */
 -(void)initFaceDetector {
-    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"lbpcascade_frontalface" ofType:@"xml"];
+//    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"lbpcascade_frontalface" ofType:@"xml"];
+    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"haarcascade_frontalface_default" ofType:@"xml"];
     const char* filePath = [cascadeModel fileSystemRepresentation];
     cascadeLoad = faceDetector.load(filePath);
 }
@@ -112,26 +113,16 @@ const float *ranges[] = {h_range, s_range};
 
 /* Operations to perform on retrieved image */
 - (void)processImage:(cv::Mat &)image {
-    // Convert image to grayscale for face detection
-    Mat grayImage;
-    cvtColor(image, grayImage, CV_BGR2GRAY);
-    
-    // Normalize brightness and increase constrast of the image
-    equalizeHist(grayImage, grayImage);
-    
-    // Convert image to HSV for back projection
-    Mat hsvImage;
-    cvtColor(image, hsvImage, CV_BGR2HSV);
-    
-    // Seperate HUE channel to be used for the histogram in back projection
-    Mat hueImage;
-    hueImage.create(hsvImage.size(), hsvImage.depth());
-    int ch[] = {0, 0};
-    mixChannels(&hsvImage, 1, &hueImage, 1, ch, 1);
-    
     switch(state){
         case FACE:
         {
+            // Convert image to grayscale
+            Mat grayImage;
+            cvtColor(image, grayImage, CV_BGR2GRAY);
+            
+            // Normalize brightness and increase constrast of the image
+            equalizeHist(grayImage, grayImage);
+            
             // Detect face and retrieve face ROI
             cv::Rect face = [self detectFace:(image) :(grayImage)];
             Mat faceROIImage = [self getFaceROI:(image) :(face)];
@@ -173,6 +164,16 @@ const float *ranges[] = {h_range, s_range};
         return;
     }
     
+    // Convert image to HSV for back projection
+    Mat hsvImage;
+    cvtColor(image, hsvImage, CV_BGR2HSV);
+    
+    // Seperate HUE channel to be used for the histogram in back projection
+    Mat hueImage;
+    hueImage.create(hsvImage.size(), hsvImage.depth());
+    int ch[] = {0, 0};
+    mixChannels(&hsvImage, 1, &hueImage, 1, ch, 1);
+    
     // Normalize the histogram
     normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
     
@@ -203,6 +204,129 @@ const float *ranges[] = {h_range, s_range};
         default:
             break;
     }
+
+    
+//    switch(state){
+//        case FACE:
+//        {
+//            // Detect face and retrieve face ROI
+//            cv::Rect face = [self detectFace:(image) :(grayImage)];
+//            Mat faceROIImage = [self getFaceROI:(image) :(face)];
+//            
+//            // Convert forehead ROI to HSV
+//            Mat roiHSV;
+//            cvtColor(faceROIImage, roiHSV, CV_BGR2HSV);
+//            
+//            // Get histogram of the HSV of the ROI
+//            skinHist = [self getHistogram:(roiHSV)];
+//            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
+//            
+//            // Calculate a back projection of the hue image
+//            Mat backProjectedImage;
+//            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
+//            
+//            // Blur the back projection
+//            Mat blur;
+//            medianBlur(backProjectedImage, blur, 9);
+//            Mat final;
+//            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
+//            
+//            // Erode and dilate the final image
+//            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
+//            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
+//            
+//            // Display different image based on imageState
+//            switch(imageState){
+//                case NORMAL:
+//                    break;
+//                case SKIN:
+//                    final.copyTo(image);
+//                    break;
+//            }
+//            
+//            NSLog(@"FACE STATE");
+//            break;
+//        }
+//        case HAND:
+//        {
+//            // Get hand ROI
+//            Mat handROIImage = [self getHandROI:(image)];
+//            
+//            // Convert ROI to HSV
+//            Mat roiHSV;
+//            cvtColor(handROIImage, roiHSV, CV_BGR2HSV);
+//            
+//            // Get histogram of the HSV of the ROI
+//            skinHist = [self getHistogram:(roiHSV)];
+//            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
+//            
+//            // Calculate a back projection of the hue image
+//            Mat backProjectedImage;
+//            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
+//            
+//            // Blur the back projection
+//            Mat blur;
+//            medianBlur(backProjectedImage, blur, 9);
+//            Mat final;
+//            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
+//            
+//            // Erode and dilate the final image
+//            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
+//            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
+//            
+//            // Display different image based on imageState
+//            switch(imageState){
+//                case NORMAL:
+//                    break;
+//                case SKIN:
+//                    final.copyTo(image);
+//                    break;
+//            }
+//
+//            
+//            NSLog(@"HAND STATE");
+//            break;
+//        }
+//        case DETECT:
+//        {
+//            
+//            //[self getHandROI:(image)];
+//            // Normalise the skin histogram
+//            normalize(skinHist, skinHist, 0, 255, NORM_MINMAX, -1, Mat());
+//            Mat backProjectedImage;
+//            calcBackProject(&hsvImage, 1, channels, skinHist, backProjectedImage, ranges, 1, true);
+//            
+//            // Blur the back projection
+//            Mat blur;
+//            medianBlur(backProjectedImage, blur, 9);
+//            Mat final;
+//            threshold(blur, final, 0, 255, THRESH_BINARY + THRESH_OTSU);
+//            
+//            // Erode and dilate the final image
+//            erode(final, final, getStructuringElement(MORPH_RECT, cvSize(self.erodeSlider.value, self.erodeSlider.value)));
+//            dilate(final, final, getStructuringElement(MORPH_RECT, cvSize(self.dilateSlider.value, self.dilateSlider.value)));
+//            
+//            
+//            // Display different image based on imageState
+//            switch(imageState){
+//                case NORMAL:
+//                    //                    [self findAndDrawContours:(final) :(image)];
+//                    [self findAndDrawLargestContour:(final) :(image)];
+//                    [self findAndDrawConvexHull:(final) :(image)];
+//                    
+//                    break;
+//                case SKIN:
+//                    final.copyTo(image);
+//                    break;
+//            }
+//
+//            NSLog(@"DETECT STATE");
+//            break;
+//        }
+//        default:
+//            NSLog(@"INVALID STATE");
+//            break;
+//    }
     
     //Add one frame
     totalFrames++;
@@ -293,12 +417,13 @@ const float *ranges[] = {h_range, s_range};
     }
     
     // Simplify the largest contour
-    approxPolyDP(Mat(contours[largestContourIndex]), contours[largestContourIndex], 5, true);
+//    approxPolyDP(Mat(contours[largestContourIndex]), contours[largestContourIndex], 5, true);
     
     // Draw largest contour (if it exists)
     if(!contours[largestContourIndex].empty()){
         Scalar color = Scalar(0, 255, 0);
-        drawContours(outputImage, contours, largestContourIndex, color, CV_FILLED);
+//        drawContours(outputImage, contours, largestContourIndex, color, CV_FILLED);
+        drawContours(outputImage, contours, largestContourIndex, color, 5);
     }
 }
 
