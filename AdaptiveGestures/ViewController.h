@@ -28,7 +28,10 @@ enum ImageState { NORMAL, SKIN };
     bool cascadeLoad;
     State state;
     ImageState imageState;
-    std::vector<std::vector<cv::Point>> contours;
+    vector<vector<cv::Point>> contours;
+    vector<vector<cv::Point>> hullsP;
+    vector<vector<int>> hullsI;
+    vector<vector<Vec4i>> defects;
     int largestContourIndex;
 }
 

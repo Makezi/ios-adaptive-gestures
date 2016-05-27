@@ -6,9 +6,6 @@
 //  Copyright © 2016 Marko Djordjevic. All rights reserved.
 //
 
-// PRE OPTIMIZATION: 15-17 FPS DURING FACE, 25-28 FPS DURING HAND
-//
-
 #import "ViewController.h"
 
 @interface ViewController ()
@@ -89,8 +86,8 @@ const float *ranges[] = {h_range, s_range};
 
 /* Initialise face detector by loading cascade model */
 -(void)initFaceDetector {
-//    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"lbpcascade_frontalface" ofType:@"xml"];
-    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"haarcascade_frontalface_default" ofType:@"xml"];
+    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"lbpcascade_frontalface" ofType:@"xml"];
+//    NSString* cascadeModel = [[NSBundle mainBundle] pathForResource:@"haarcascade_frontalface_default" ofType:@"xml"];
     const char* filePath = [cascadeModel fileSystemRepresentation];
     cascadeLoad = faceDetector.load(filePath);
 }
@@ -127,7 +124,7 @@ const float *ranges[] = {h_range, s_range};
             cv::Rect face = [self detectFace:(image) :(grayImage)];
             Mat faceROIImage = [self getFaceROI:(image) :(face)];
             
-            // Convert forehead ROI to HSV
+            // Convert ROI to HSV
             Mat roiHSV;
             cvtColor(faceROIImage, roiHSV, CV_BGR2HSV);
             
@@ -194,8 +191,11 @@ const float *ranges[] = {h_range, s_range};
     switch(imageState){
         case NORMAL:
             if(state == DETECT){
-                [self findAndDrawLargestContour:(final) :(image)];
-                [self findAndDrawConvexHull:(final) :(image)];
+                [self createContours:(final) :(image)];
+                [self createConvexHulls:(final) :(image)];
+                [self drawDefects:(image)];
+//                [self findAndDrawLargestContour:(final) :(image)];
+//                [self findAndDrawConvexHull:(final) :(image)];
             }
             break;
         case SKIN:
@@ -395,17 +395,105 @@ const float *ranges[] = {h_range, s_range};
     return faceROIImage;
 }
 
+-(void)createContours:(cv::Mat) srcImage :(cv::Mat) outputImage {
+    // Find contours
+    findContours(srcImage, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    
+    // Return if none exist
+    if(contours.size() == 0) return;
+    
+    // Find largest contour index
+    [self findLargestContourIndex];
+    
+    // Return if contour index is -1
+    if(largestContourIndex == -1) return;
+    
+    // Draw largest contour
+    Scalar color = Scalar(0, 255, 0);
+    drawContours(outputImage, contours, largestContourIndex, color, 5);
+}
+
+-(void)findLargestContourIndex {
+    int maxArea = 0;
+    largestContourIndex = -1;
+    for(int i = 0; i < contours.size(); i++){
+        int area = (int)contourArea(contours[i]);
+        if(area > maxArea){
+            maxArea = area;
+            largestContourIndex = i;
+        }
+    }
+}
+
+-(void)createConvexHulls:(cv::Mat) srcImage :(cv::Mat) outputImage {
+    // Init vectors if contours exist, otherwise return
+    if(contours.size() == 0) return;
+    hullsP = vector<vector<cv::Point>>(contours.size());
+    hullsI = vector<vector<int>>(contours.size());
+    defects = vector<vector<Vec4i>>(contours.size());
+    
+    if(largestContourIndex == -1) return;
+    
+    convexHull(Mat(contours[largestContourIndex]), hullsP[largestContourIndex], false, true);
+    convexHull(Mat(contours[largestContourIndex]), hullsI[largestContourIndex], false, false);
+    
+    if(contours[largestContourIndex].size() > 3){
+        convexityDefects(contours[largestContourIndex], hullsI[largestContourIndex], defects[largestContourIndex]);
+    }
+    
+    if(hullsP.empty()) return;
+    Scalar color = Scalar(150, 255, 0);
+    approxPolyDP(Mat(hullsP[largestContourIndex]), hullsP[largestContourIndex], 18, true);
+    drawContours(outputImage, hullsP, largestContourIndex, color);
+    
+    
+//    for(int i = 0; i < contours.size(); i++){
+//        convexHull(Mat(contours[i]), hullsP[i], true);
+//        convexHull(Mat(contours[i]), hullsI[i], true);
+//    }
+//    
+//    // Draw largest convex hull (if it exists)
+//    if(!hullsP.empty()){
+//        Scalar color = Scalar(150, 255, 0);
+//        for(int i = 0; i < contours.size(); i++){
+//            drawContours(outputImage, hullsP, largestContourIndex, color);
+//        }
+//    }
+
+}
+
+-(void)drawDefects:(cv::Mat) outputImage {
+    vector<Vec4i>::iterator d = defects[largestContourIndex].begin();
+    
+    while(d != defects[largestContourIndex].end()){
+        Vec4i &v = (*d);
+        int startidx = v[0];
+        cv::Point ptStart(contours[largestContourIndex][startidx]);
+        int endidx = v[1];
+        cv::Point ptEnd(contours[largestContourIndex][endidx]);
+        int faridx = v[2];
+        cv::Point ptFar(contours[largestContourIndex][faridx]);
+        circle(outputImage, ptFar, 9, Scalar(0, 205, 0), 5);
+        d++;
+    }
+}
+
+-(void)eliminateDefects {
+    
+}
+
 /* Find the largest contour from srcImage and then draw it on outputImage */
 -(void)findAndDrawLargestContour:(cv::Mat) srcImage :(cv::Mat) outputImage {
     // Find contours
-    findContours(srcImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    findContours(srcImage, contours, RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
     
-    // Return if none exist
+    // Return if no contours exist
     if(contours.size() == 0){
         return;
         
     }
     // Find largest contour based on area
+//    [self findLargestContour];
     int maxArea = 0;
     largestContourIndex = 0;
     for(int i = 0; i < contours.size(); i++){
@@ -426,6 +514,8 @@ const float *ranges[] = {h_range, s_range};
         drawContours(outputImage, contours, largestContourIndex, color, 5);
     }
 }
+
+
 
 /* Finds the convex hull from largest contour and draw its it to the toImage */
 -(void)findAndDrawConvexHull:(cv::Mat) srcImage :(cv::Mat) outputImage {
