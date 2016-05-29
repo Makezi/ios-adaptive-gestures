@@ -33,6 +33,9 @@ enum ImageState { NORMAL, SKIN };
     vector<vector<int>> hullsI;
     vector<vector<Vec4i>> defects;
     int largestContourIndex;
+    
+    std::vector<cv::Mat> roiMat;
+    std::vector<MatND> skinHists;
 }
 
 @property (nonatomic, strong) VideoCamera* camera;
