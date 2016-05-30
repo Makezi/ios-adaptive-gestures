@@ -206,7 +206,7 @@ const float *ranges[] = {h_range, s_range};
             break;
         }
         case DETECT:
-            NSLog(@"DETECT STATE");
+//            NSLog(@"DETECT STATE");
             break;
         default:
             NSLog(@"INVALID STATE");
@@ -247,9 +247,16 @@ const float *ranges[] = {h_range, s_range};
             if (state == DETECT) {
                 [self createContours:(final) :(image)];
                 [self createConvexHulls:(final) :(image)];
-//                if([self detectIfHand]){
-                    [self drawDefects:(image)];
-    //                }
+                [self getFingerTips];
+                [self removeFalseFingerTips];
+                
+                
+
+//                [self eliminateDefects];
+//                [self removeFalseFingerTips];
+//                [self drawFingerRects:(image)];
+                [self drawFingerTips:(image)];
+//                    [self drawDefects:(image)];
     
     //                [self findAndDrawLargestContour:(final) :(image)];
     //                [self findAndDrawConvexHull:(final) :(image)];
@@ -442,8 +449,12 @@ const float *ranges[] = {h_range, s_range};
     // Return if contour index is -1
     if(largestContourIndex == -1) return;
     
+    bRect = boundingRect(Mat(contours[largestContourIndex]));
+    
+    rectangle(outputImage, bRect.tl(), bRect.br(), Scalar(25, 25, 25));
+
     // Draw largest contour
-    Scalar color = Scalar(25, 25, 25);
+//    Scalar color = Scalar(25, 25, 25);
 //    drawContours(outputImage, contours, largestContourIndex, color, 2);
 }
 
@@ -493,6 +504,7 @@ const float *ranges[] = {h_range, s_range};
 //            drawContours(outputImage, hullsP, largestContourIndex, color);
 //        }
 //    }
+    
 
 }
 
@@ -527,7 +539,6 @@ const float *ranges[] = {h_range, s_range};
 //            }
 //        }
 //    }
-    
     for(int i = 0; i < contours.size(); i++){
         for(const Vec4i& v : defects[i]){
             float depth = v[3] / 256;
@@ -535,13 +546,141 @@ const float *ranges[] = {h_range, s_range};
                 int startidx = v[0]; cv::Point ptStart(contours[i][startidx]);
                 int endidx = v[1]; cv::Point ptEnd(contours[i][endidx]);
                 int faridx = v[2]; cv::Point ptFar(contours[i][faridx]);
-                circle(outputImage, ptStart, 4, Scalar(255, 0, 0), 2); // Fingertips
-//                circle(outputImage, ptFar, 4, Scalar(255, 0, 0), 2); // Defect Points
+//                circle(outputImage, ptStart, 4, Scalar(255, 0, 0), 2); // Fingertips
                 
+            }
+        }
+        
+        
+    }
+    
+
+}
+
+-(void)getFingerTips {
+    fingerTips.clear();
+//    bool isFirstFinger = true;
+    for(int i = 0; i < contours.size(); i++){
+        for(const Vec4i& v : defects[i]){
+            float depth = v[3] / 256;
+            if(depth > 30 && i == largestContourIndex){
+                int startidx = v[0]; cv::Point ptStart(contours[i][startidx]);
+                int endidx = v[1]; cv::Point ptEnd(contours[i][endidx]);
+                int faridx = v[2]; cv::Point ptFar(contours[i][faridx]);
+//                if(isFirstFinger){
+//                    fingerTips.push_back(ptStart);
+//                    isFirstFinger = false;
+//                }
+                fingerTips.push_back(ptEnd);
+            }
+        }
+
+    }
+    
+    
+    if(fingerTips.size() == 0){
+        // CHECK FOR ONE FINGER!
+    }
+    
+   
+}
+        
+-(void)drawFingerTips:(Mat) outputImage {
+    for(int i = 0; i < fingerTips.size(); i++){
+        circle(outputImage, fingerTips[i], 5, Scalar(255, 0, 0), 4);
+    }
+}
+
+-(float)distanceP2P:(cv::Point) pt1 :(cv::Point) pt2 {
+    return sqrt(fabs(pow(pt1.x - pt2.x, 2) + pow(pt1.y - pt2.y, 2)));
+}
+
+-(void)removeFalseFingerTips {
+    std::vector<cv::Point> newFingers;
+    for(int i = 0; i < fingerTips.size(); i++){
+        for(int j = i; j < fingerTips.size(); j++){
+            NSLog(@"I: %d", i);
+            NSLog(@"J: %d", j);
+            NSLog(@"DISTANCE: %f", [self distanceP2P:(fingerTips[i]) :(fingerTips[j])]);
+            if([self distanceP2P:(fingerTips[i]) :(fingerTips[j])] >= 10 && i != j){
+                NSLog(@"ADDED");
+                newFingers.push_back(fingerTips[i]);
+                break;
+            }else{
+                NSLog(@"NOT ADDED");
+            }
+        }
+    }
+    fingerTips.swap(newFingers);
+    
+    
+}
+
+-(void)drawFingerRects:(Mat) outputImage {
+    int len = 5;
+    for(int i = 0; i <fingerTips.size(); i++){
+        rectangle(outputImage, fingerTips[i], cv::Point(fingerTips[i].x + len, fingerTips[i].y + len), Scalar(0, 255, 0), 2);
+        len += 2;
+    }
+}
+
+-(float)getAngle:(cv::Point) s :(cv::Point) f : (cv::Point) e {
+    float l1 = [self distanceP2P:(f) :(s)];
+    float l2 = [self distanceP2P:(f) :(e)];
+    float dot = (s.x-f.x)*(e.x-f.x) + (s.y-f.y)*(e.y-f.y);
+    float angle = acos(dot/(l1*l2));
+    angle = angle *180/3.14159265359;
+    return angle;
+}
+
+-(void)eliminateDefects {
+    int tolerance = bRect.height/5;
+    float angleTol = 95;
+    std::vector<Vec4i> newDefects;
+    for(int i = 0; i < contours.size(); i++){
+        for(const Vec4i& v : defects[i]){
+            int startidx = v[0]; cv::Point ptStart(contours[i][startidx]);
+            int endidx = v[1]; cv::Point ptEnd(contours[i][endidx]);
+            int faridx = v[2]; cv::Point ptFar(contours[i][faridx]);
+            if([self distanceP2P:(ptStart) : (ptFar)] > tolerance &&
+               [self distanceP2P:(ptEnd) : (ptFar)] > tolerance && [self getAngle:(ptStart):(ptFar):(ptEnd)] < angleTol){
+                if(ptEnd.y > (bRect.y + bRect.height - bRect.height / 4)){
+                    
+                }else if(ptStart.y > (bRect.y + bRect.height - bRect.height / 4)){
+                    
+                }else {
+                    newDefects.push_back(v);
+                }
+            }
+        }
+    }
+    defects[largestContourIndex].swap(newDefects);
+    [self removeRedundantEndPoints:(newDefects)];
+}
+
+-(void)removeRedundantEndPoints:(std::vector<Vec4i>) newDefects {
+    Vec4i temp;
+    float avgX;
+    float avgY;
+    float tolerance = bRect.width / 6;
+    int startidx, endidx, faridx;
+    int startidx2, endidx2;
+    for(int i=0;i<newDefects.size();i++){
+        for(int j=i;j<newDefects.size();j++){
+            startidx=newDefects[i][0]; cv::Point ptStart(contours[largestContourIndex][startidx] );
+            endidx=newDefects[i][1]; cv::Point ptEnd(contours[largestContourIndex][endidx] );
+            startidx2=newDefects[j][0]; cv::Point ptStart2(contours[largestContourIndex][startidx2] );
+            endidx2=newDefects[j][1]; cv::Point ptEnd2(contours[largestContourIndex][endidx2] );
+            if([self distanceP2P:(ptStart):(ptEnd2)] < tolerance ){
+                contours[largestContourIndex][startidx]=ptEnd2;
+                break;
+            }if([self distanceP2P:(ptEnd):(ptStart2)] < tolerance ){
+                contours[largestContourIndex][startidx2]=ptEnd;
             }
         }
     }
 }
+
 
 /* Find the largest contour from srcImage and then draw it on outputImage */
 -(void)findAndDrawLargestContour:(cv::Mat) srcImage :(cv::Mat) outputImage {

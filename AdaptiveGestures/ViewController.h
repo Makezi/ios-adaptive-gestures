@@ -36,6 +36,10 @@ enum ImageState { NORMAL, SKIN };
     
     std::vector<cv::Mat> roiMat;
     std::vector<MatND> skinHists;
+    
+    std::vector<cv::Point> fingerTips;
+    
+    cv::Rect bRect;
 }
 
 @property (nonatomic, strong) VideoCamera* camera;
