@@ -30,7 +30,8 @@
 		0FBE609D1CBF2E090031037B /* VideoCamera.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBE609C1CBF2E090031037B /* VideoCamera.mm */; };
 		0FBE60A11CD6F1400031037B /* haarcascade_frontalface_default.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE60A01CD6F1400031037B /* haarcascade_frontalface_default.xml */; };
 		0FBE60A31CD70C710031037B /* haarcascade_frontalface_alt2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE60A21CD70C710031037B /* haarcascade_frontalface_alt2.xml */; };
-		EF1138719930DBE85114CC35 /* ROI.mm in Sources */ = {isa = PBXBuildFile; fileRef = EF113E30B74C6AA65E7AF6FA /* ROI.mm */; };
+		EF11387D1596E248C530B856 /* FingerTipDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = EF11328545BB0699AD8CFA4D /* FingerTipDetector.mm */; };
+		EF113DCC9BB6336123267089 /* FaceDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = EF113594BCDD8ED80E8E3565 /* FaceDetector.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,8 +85,10 @@
 		0FBE609C1CBF2E090031037B /* VideoCamera.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoCamera.mm; sourceTree = "<group>"; };
 		0FBE60A01CD6F1400031037B /* haarcascade_frontalface_default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = haarcascade_frontalface_default.xml; path = "../../../../../Downloads/opencv-master/data/haarcascades_cuda/haarcascade_frontalface_default.xml"; sourceTree = "<group>"; };
 		0FBE60A21CD70C710031037B /* haarcascade_frontalface_alt2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = haarcascade_frontalface_alt2.xml; path = "../../../../../Downloads/opencv-master/data/haarcascades/haarcascade_frontalface_alt2.xml"; sourceTree = "<group>"; };
-		EF113689DE4F61900FE3E229 /* ROI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ROI.h; sourceTree = "<group>"; };
-		EF113E30B74C6AA65E7AF6FA /* ROI.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ROI.mm; sourceTree = "<group>"; };
+		EF11328545BB0699AD8CFA4D /* FingerTipDetector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FingerTipDetector.mm; sourceTree = "<group>"; };
+		EF113594BCDD8ED80E8E3565 /* FaceDetector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FaceDetector.mm; sourceTree = "<group>"; };
+		EF1139BDE5B471C37239AE73 /* FingerTipDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerTipDetector.h; sourceTree = "<group>"; };
+		EF113F2FAEF7FBB77EC286AC /* FaceDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceDetector.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,8 +162,10 @@
 				0FBE60451CBE43170031037B /* Supporting Files */,
 				0FBE609B1CBF2DA00031037B /* VideoCamera.h */,
 				0FBE609C1CBF2E090031037B /* VideoCamera.mm */,
-				EF113E30B74C6AA65E7AF6FA /* ROI.mm */,
-				EF113689DE4F61900FE3E229 /* ROI.h */,
+				EF113594BCDD8ED80E8E3565 /* FaceDetector.mm */,
+				EF113F2FAEF7FBB77EC286AC /* FaceDetector.h */,
+				EF11328545BB0699AD8CFA4D /* FingerTipDetector.mm */,
+				EF1139BDE5B471C37239AE73 /* FingerTipDetector.h */,
 			);
 			path = AdaptiveGestures;
 			sourceTree = "<group>";
@@ -353,7 +358,8 @@
 				0FBE604D1CBE43170031037B /* ViewController.mm in Sources */,
 				0FBE604A1CBE43170031037B /* AppDelegate.mm in Sources */,
 				0FBE60471CBE43170031037B /* main.m in Sources */,
-				EF1138719930DBE85114CC35 /* ROI.mm in Sources */,
+				EF113DCC9BB6336123267089 /* FaceDetector.mm in Sources */,
+				EF11387D1596E248C530B856 /* FingerTipDetector.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +497,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AdaptiveGestures/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.markodjordjevic.AdaptiveGestures;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -506,6 +513,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = AdaptiveGestures/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.markodjordjevic.AdaptiveGestures;
 				PRODUCT_NAME = "$(TARGET_NAME)";

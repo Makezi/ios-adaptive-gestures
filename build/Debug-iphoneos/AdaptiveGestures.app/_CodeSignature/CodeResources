@@ -8,7 +8,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Tc+tPbITVa0d/9d/zb7hxV7NO/s=
+			knCjG6uvq4UOI6pJUgrJyF8J1nY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -26,14 +26,14 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IRmjW7g0K8W4MvKSiVu2cbqhfus=
+			w1cDSzbVTcHJHzzQukAuGUODvf8=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
 		<key>Info.plist</key>
 		<data>
-		Uj0RZtPP9PczIQE1mDsRKHkc+Eo=
+		PXEr+Wkdw6AwSNkkmEb3OsvpWNk=
 		</data>
 		<key>Main.storyboardc/Info.plist</key>
 		<data>
@@ -41,11 +41,27 @@
 		</data>
 		<key>Main.storyboardc/RhO-OB-PGh-view-RAS-9F-oku.nib</key>
 		<data>
-		XQTP6YplvAX0VWR/tBX+qHXb1Bs=
+		TB2CgzWBu1J7L2lkneaSzJlgcTM=
 		</data>
 		<key>Main.storyboardc/UIViewController-RhO-OB-PGh.nib</key>
 		<data>
-		R2i/J0BdYOwrKGrpvqFhLVaxQOw=
+		mHyUxAZLqsNa8RDsC9Go9X+3jwo=
+		</data>
+		<key>Main~ipad.storyboardc/Info-8.0+.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~ipad.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~iphone.storyboardc/Info-8.0+.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~iphone.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -53,7 +69,7 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		4fhEHcmZmR32goDH9kyAcoqId8c=
+		cYeJA7jXim8UylOJrX75hcdmf8s=
 		</data>
 		<key>haarcascade_frontalface_alt2.xml</key>
 		<data>
@@ -74,7 +90,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Tc+tPbITVa0d/9d/zb7hxV7NO/s=
+			knCjG6uvq4UOI6pJUgrJyF8J1nY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -92,7 +108,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IRmjW7g0K8W4MvKSiVu2cbqhfus=
+			w1cDSzbVTcHJHzzQukAuGUODvf8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -103,15 +119,31 @@
 		</data>
 		<key>Main.storyboardc/RhO-OB-PGh-view-RAS-9F-oku.nib</key>
 		<data>
-		XQTP6YplvAX0VWR/tBX+qHXb1Bs=
+		TB2CgzWBu1J7L2lkneaSzJlgcTM=
 		</data>
 		<key>Main.storyboardc/UIViewController-RhO-OB-PGh.nib</key>
 		<data>
-		R2i/J0BdYOwrKGrpvqFhLVaxQOw=
+		mHyUxAZLqsNa8RDsC9Go9X+3jwo=
+		</data>
+		<key>Main~ipad.storyboardc/Info-8.0+.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~ipad.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~iphone.storyboardc/Info-8.0+.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
+		</data>
+		<key>Main~iphone.storyboardc/Info.plist</key>
+		<data>
+		jZyusVzXj0PIRy8PvB+oop5vwd4=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		4fhEHcmZmR32goDH9kyAcoqId8c=
+		cYeJA7jXim8UylOJrX75hcdmf8s=
 		</data>
 		<key>haarcascade_frontalface_alt2.xml</key>
 		<data>

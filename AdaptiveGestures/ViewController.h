@@ -7,40 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <opencv2/videoio/cap_ios.h>
-#import <opencv2/objdetect/objdetect.hpp>
-#import <opencv2/imgproc.hpp>
-#import <opencv2/highgui.hpp>
-#import <opencv2/video.hpp>
+
 #import "VideoCamera.h"
+#import "FaceDetector.h"
+#import "FingerTipDetector.h"
 
 using namespace cv;
 using namespace std;
 
-enum State { FACE, HAND, DETECT };
-enum ImageState { NORMAL, SKIN };
-
 @interface ViewController : UIViewController<VideoCameraDelegate> {
-    VideoCamera* camera;
-    CascadeClassifier faceDetector;
-    MatND skinHist;
+    VideoCamera *camera;
+    FaceDetector *detector;
+    FingerTipDetector *ftd;
     int totalFrames;
-    bool cascadeLoad;
-    State state;
-    ImageState imageState;
-    vector<vector<cv::Point>> contours;
-    vector<vector<cv::Point>> hullsP;
-    vector<vector<int>> hullsI;
-    vector<vector<Vec4i>> defects;
-    int largestContourIndex;
-    
-    std::vector<cv::Mat> roiMat;
-    std::vector<MatND> skinHists;
-    
-    std::vector<cv::Point> fingerTips;
-    std::vector<cv::Point> depthPoints;
-    cv::Rect bRect;
-    cv::Point2f palmCenter;
 }
 
 @property (nonatomic, strong) VideoCamera* camera;

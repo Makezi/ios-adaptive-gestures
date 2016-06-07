@@ -1,6 +1,7 @@
 dependencies: \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/ViewController.mm \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/ViewController.h \
+  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/VideoCamera.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/videoio/cap_ios.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/core.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/core/cvdef.h \
@@ -25,6 +26,7 @@ dependencies: \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/core/core_c.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/core/types_c.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/core/optim.hpp \
+  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/FaceDetector.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/objdetect/objdetect.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/objdetect.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/objdetect/detection_based_tracker.hpp \
@@ -32,6 +34,7 @@ dependencies: \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/imgproc.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/imgproc/imgproc_c.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/imgproc/types_c.h \
+  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/FingerTipDetector.h \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/highgui.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/imgcodecs.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/videoio.hpp \
@@ -41,5 +44,4 @@ dependencies: \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/video.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/video/tracking.hpp \
   /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/video/background_segm.hpp \
-  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/video/tracking_c.h \
-  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/AdaptiveGestures/VideoCamera.h
+  /Users/markodjordjevic/Documents/Projects/IOS/AdaptiveGestures/opencv2.framework/Headers/video/tracking_c.h
